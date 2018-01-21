@@ -127,17 +127,17 @@ namespace Gpseq {
 				_storage = null;
 			}
 			return _spliterator.each_chunk((chunk) => {
-				int i = 0;
-				while (i < chunk.length) {
+				int idx = 0;
+				for (int i = 0; i < chunk.length; i++) {
 					Iterator<R> iter = _mapper(chunk[i]);
 					iter.foreach((g) => {
-						if (i >= array.length) array.resize( next_pot(i) );
-						array[i++] = g;
+						if (idx >= array.length) array.resize( next_pot(idx) );
+						array[idx++] = g;
 						return true;
 					});
 				}
-				if (i == 0) return true;
-				return f(array[0:i]);
+				if (idx == 0) return true;
+				return f(array[0:idx]);
 			});
 		}
 
