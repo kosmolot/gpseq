@@ -115,33 +115,9 @@ namespace Gpseq {
 			return new SumUlongCollector<G>((owned) mapper);
 		}
 
-		/**
-		 * Returns a collector that produces the sum of the given function
-		 * applied to the elements. If no elements, the result is 0.
-		 *
-		 * The //mapper// function must not return null.
-		 *
-		 * @param mapper a //non-interfering// and //stateless// mapping
-		 * function
-		 * @return the collector implementation
-		 */
-		public Collector<G,void*,float?> sum_float<G> (owned MapFunc<float?,G> mapper) {
-			return new SumFloatCollector<G>((owned) mapper);
-		}
+		// TODO public Collector<G,void*,float?> sum_float<G> (owned MapFunc<float?,G> mapper) {}
 
-		/**
-		 * Returns a collector that produces the sum of the given function
-		 * applied to the elements. If no elements, the result is 0.
-		 *
-		 * The //mapper// function must not return null.
-		 *
-		 * @param mapper a //non-interfering// and //stateless// mapping
-		 * function
-		 * @return the collector implementation
-		 */
-		public Collector<G,void*,double?> sum_double<G> (owned MapFunc<double?,G> mapper) {
-			return new SumDoubleCollector<G>((owned) mapper);
-		}
+		// TODO public Collector<G,void*,double?> sum_double<G> (owned MapFunc<double?,G> mapper) {}
 
 		/**
 		 * Returns a collector that produces the sum of the given function

@@ -63,8 +63,6 @@ sources = files(
 	'collectors/ConcurrentListCollector.vala',
 	'collectors/GenericArrayCollector.vala',
 	'collectors/ListCollector.vala',
-	'collectors/SumDoubleCollector.vala',
-	'collectors/SumFloatCollector.vala',
 	'collectors/SumInt32Collector.vala',
 	'collectors/SumInt64Collector.vala',
 	'collectors/SumIntCollector.vala',
