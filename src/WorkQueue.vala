@@ -112,6 +112,7 @@ namespace Gpseq {
 				ForkJoinTask cmp = current[i];
 				if (compare_and_exchange(current, i, cmp, null)) {
 					new_array[i] = cmp;
+					cmp.unref();
 				}
 			}
 			_array = new_array;
@@ -148,11 +149,13 @@ namespace Gpseq {
 				return null;
 			}
 
-			ForkJoinTask? oldval = cur_array[t];
+			ForkJoinTask* oldval = (ForkJoinTask*) *cur_array.get_pointer(t);
 			if (oldval != null) {
 				if (compare_and_exchange(cur_array, t, oldval, null)) {
 					_tail = t;
-					return oldval;
+					ForkJoinTask? result = (ForkJoinTask?) oldval;
+					result.unref();
+					return result;
 				}
 			}
 			return null;
@@ -169,25 +172,21 @@ namespace Gpseq {
 			int size = old_tail - old_head;
 			if (size <= 0) return null;
 
-			// FIXME g_object_ref: assertion 'object->ref_count > 0' failed
-			ForkJoinTask? oldval = cur_array[old_head];
+			ForkJoinTask* oldval = (ForkJoinTask*) *cur_array.get_pointer(old_head);
 			if (oldval != null) {
 				if (compare_and_exchange(cur_array, old_head, oldval, null)) {
 					AtomicInt.set(ref _head, old_head + 1);
-					return oldval;
+					ForkJoinTask? result = (ForkJoinTask?) oldval;
+					result.unref();
+					return result;
 				}
 			}
 			return null;
 		}
 
 		private bool compare_and_exchange (CircularArray<ForkJoinTask> array,
-				int idx, ForkJoinTask? oldval, ForkJoinTask? newval) {
-			if (AtomicPointer.compare_and_exchange(array.get_pointer(idx), oldval, newval)) {
-				if (newval != null) newval.ref();
-				if (oldval != null) oldval.unref();
-				return true;
-			}
-			return false;
+				int idx, ForkJoinTask* oldval, ForkJoinTask* newval) {
+			return AtomicPointer.compare_and_exchange(array.get_pointer(idx), oldval, newval);
 		}
 
 		private class CircularArray<G> : Object {
