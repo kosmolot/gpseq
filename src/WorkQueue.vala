@@ -58,7 +58,7 @@ namespace Gpseq {
 		 * Gets the maximum size of queue arrays.
 		 * @return the maximum size of queue arrays
 		 */
-		public static int get_max_queue_log_capacity () {
+		private static int get_max_queue_log_capacity () {
 			/* no synchronization required for this method;
 			 * the method always returns the same value on the same device
 			 */
