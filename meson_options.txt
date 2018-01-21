@@ -1,1 +1,2 @@
 option('build_benchmark', type: 'boolean', value: false, description: 'build benchmark')
+option('build_valadoc', type: 'boolean', value: false, description: 'build valadoc')

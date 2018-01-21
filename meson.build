@@ -45,3 +45,25 @@ subdir('tests')
 if get_option('build_benchmark')
 	subdir('benchmark')
 endif
+
+if get_option('build_valadoc')
+	valadoc = find_program('valadoc')
+	valadoc_cmd = [valadoc,
+		'--package-name=' + meson.project_name() + '-' + api_version,
+		'--package-version=' + meson.project_version(),
+		'--target-glib=' + glib_reqs,
+		'--force',
+		'--doclet=html',
+		'--pkg=glib-2.0',
+		'--pkg=gobject-2.0',
+		'--pkg=gee-0.8',
+		'--directory=@OUTPUT@',
+		'@INPUT@'
+	]
+	custom_target('valadoc', command: valadoc_cmd,
+		input: sources,
+		output: 'docs',
+		build_by_default: true,
+		install: true,
+		install_dir: 'share/doc/' + meson.project_name() + '-' + api_version)
+endif
