@@ -583,26 +583,40 @@ public abstract class SeqTests<G> : Gpseq.TestSuite {
 
 	private void test_map () {
 		GenericArray<G> array = create_rand_generic_array(LENGTH);
-		Iterator<string> result = Seq.of_generic_array<G>(array)
-				.map<string>(map_to_str)
-				.iterator();
-		GenericArray<string> result_array = iter_to_generic_array<string>(result);
-
-		GenericArray<string> validation = new GenericArray<string>();
+		GenericArray<string> validation = new GenericArray<string>(LENGTH);
 		for (int i = 0; i < LENGTH; i++) {
 			validation.add( map_to_str(array[i]) );
 		}
+
+		Iterator<string> iter = Seq.of_generic_array<G>(array)
+				.map<string>(map_to_str)
+				.iterator();
+		GenericArray<string> result_array = iter_to_generic_array<string>(iter);
+		assert_equal_array<string>(validation.data, result_array.data, (a, b) => str_equal(a, b));
+
+		result_array = new GenericArray<string>(LENGTH);
+		Seq.of_generic_array<G>(array)
+				.map<string>(map_to_str)
+				.spliterator()
+				.each((g) => result_array.add(g));
+		assert_equal_array<string>(validation.data, result_array.data, (a, b) => str_equal(a, b));
+
+		result_array = new GenericArray<string>(LENGTH);
+		Seq.of_generic_array<G>(array)
+				.map<string>(map_to_str)
+				.spliterator()
+				.each_chunk((chunk) => {
+					for (int i = 0; i < chunk.length; i++) {
+						result_array.add(chunk[i]);
+					}
+					return true;
+				});
 		assert_equal_array<string>(validation.data, result_array.data, (a, b) => str_equal(a, b));
 	}
 
 	private void test_flat_map () {
 		GenericArray<G> array = create_rand_generic_array(LENGTH);
-		Iterator<G> result = Seq.of_generic_array<G>(array)
-				.flat_map<G>(flat_map)
-				.iterator();
-		GenericArray<G> result_array = iter_to_generic_array<G>(result);
-
-		GenericArray<G> validation = new GenericArray<G>();
+		GenericArray<G> validation = new GenericArray<G>(LENGTH);
 		for (int i = 0; i < LENGTH; i++) {
 			Iterator<G> iter = flat_map(array[i]);
 			iter.foreach((g) => {
@@ -610,6 +624,30 @@ public abstract class SeqTests<G> : Gpseq.TestSuite {
 				return true;
 			});
 		}
+
+		Iterator<G> iter = Seq.of_generic_array<G>(array)
+				.flat_map<G>(flat_map)
+				.iterator();
+		GenericArray<G> result_array = iter_to_generic_array<G>(iter);
+		assert_equal_array<G>(validation.data, result_array.data, equal);
+
+		result_array = new GenericArray<G>(LENGTH);
+		Seq.of_generic_array<G>(array)
+				.flat_map<G>(flat_map)
+				.spliterator()
+				.each((g) => result_array.add(g));
+		assert_equal_array<G>(validation.data, result_array.data, equal);
+
+		result_array = new GenericArray<G>(LENGTH);
+		Seq.of_generic_array<G>(array)
+				.flat_map<G>(flat_map)
+				.spliterator()
+				.each_chunk((chunk) => {
+					for (int i = 0; i < chunk.length; i++) {
+						result_array.add(chunk[i]);
+					}
+					return true;
+				});
 		assert_equal_array<G>(validation.data, result_array.data, equal);
 	}
 
