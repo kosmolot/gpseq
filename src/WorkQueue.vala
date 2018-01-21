@@ -169,6 +169,7 @@ namespace Gpseq {
 			int size = old_tail - old_head;
 			if (size <= 0) return null;
 
+			// FIXME g_object_ref: assertion 'object->ref_count > 0' failed
 			ForkJoinTask? oldval = cur_array[old_head];
 			if (oldval != null) {
 				if (compare_and_exchange(cur_array, old_head, oldval, null)) {
