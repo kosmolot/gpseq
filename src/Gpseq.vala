@@ -28,18 +28,18 @@ namespace Gpseq {
 	 * specified compare function to get a proper result.
 	 *
 	 * {{{
-	 *     int?[] array = {5, 4, 3, 2, 1};
-	 *     parallel_sort<int?>(array);
-	 *     // => the result is undesirable, such as 5, 2, 1, 3, 4
+	 * int?[] array = {5, 4, 3, 2, 1};
+	 * parallel_sort<int?>(array);
+	 * // => the result is undesirable, such as 5, 2, 1, 3, 4
 	 *
-	 *     int?[] array2 = {5, 4, 3, 2, 1};
-	 *     parallel_sort<int?>(array2, (a, b) => {
-	 *         if (a == b) return 0;
-	 *         else if (a == null) return -1;
-	 *         else if (b == null) return 1;
-	 *         else return a < b ? -1 : (a == b ? 0 : 1);
-	 *     });
-	 *     // => the result is 1, 2, 3, 4, 5
+	 * int?[] array2 = {5, 4, 3, 2, 1};
+	 * parallel_sort<int?>(array2, (a, b) => {
+	 *     if (a == b) return 0;
+	 *     else if (a == null) return -1;
+	 *     else if (b == null) return 1;
+	 *     else return a < b ? -1 : (a == b ? 0 : 1);
+	 * });
+	 * // => the result is 1, 2, 3, 4, 5
 	 * }}}
 	 *
 	 * @param array an array to be sorted. it must be a gpointer array

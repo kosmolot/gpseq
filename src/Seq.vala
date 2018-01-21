@@ -109,10 +109,10 @@ namespace Gpseq {
 	 *
 	 * == Notes ==
 	 *
-	 * With nullable primitive types, operations using {@link CompareDataFunc}
-	 * function, such as order_by(), produce an undesirable result if the
-	 * compare function is not specified. you should provide specified compare
-	 * function to get a proper result.
+	 * With nullable primitive types, operations using
+	 * {@link GLib.CompareDataFunc} function, such as order_by(), produce an
+	 * undesirable result if the compare function is not specified. you should
+	 * provide specified compare function to get a proper result.
 	 *
 	 * Some operation might not work properly with unowned types. the best
 	 * approach is never to use unowned types for seq.
@@ -783,11 +783,11 @@ namespace Gpseq {
 		 * equivalent to:
 		 *
 		 * {{{
-		 *     A result = identity;
-		 *     foreach (G g in seq) {
-		 *         result = accumulator(g, result);
-		 *     }
-		 *     return result;
+		 * A result = identity;
+		 * foreach (G g in seq) {
+		 *     result = accumulator(g, result);
+		 * }
+		 * return result;
 		 * }}}
 		 *
 		 * but is not constrained to execute sequentially.
@@ -836,17 +836,17 @@ namespace Gpseq {
 		 * equivalent to:
 		 *
 		 * {{{
-		 *     G? result = null;
-		 *     bool found = false;
-		 *     foreach (G g in seq) {
-		 *         if (!found) {
-		 *             result = g;
-		 *             found = true;
-		 *         } else {
-		 *             result = accumulator(g, result);
-		 *         }
+		 * G? result = null;
+		 * bool found = false;
+		 * foreach (G g in seq) {
+		 *     if (!found) {
+		 *         result = g;
+		 *         found = true;
+		 *     } else {
+		 *         result = accumulator(g, result);
 		 *     }
-		 *     return found ? new Optional<G>.of(result) : new Optional<G>.empty();
+		 * }
+		 * return found ? new Optional<G>.of(result) : new Optional<G>.empty();
 		 * }}}
 		 *
 		 * but is not constrained to execute sequentially.
@@ -907,7 +907,7 @@ namespace Gpseq {
 		 * This is a stateless intermediate operation.
 		 *
 		 * @param mapper a //non-interfering// and //stateless// mapping
-		 * function. if it returns an {@link Iterator.valid} iterator, the
+		 * function. if it returns an {@link Gee.Iterator.valid} iterator, the
 		 * element that the iterator points is also included in the result.
 		 * @return the new seq
 		 */

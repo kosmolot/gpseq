@@ -29,8 +29,7 @@ namespace Gpseq {
 	 * A collector implements four methods: {@link create_accumulator},
 	 * {@link accumulate}, {@link combine}, and {@link finish}.
 	 *
-	 *  i. create_accumulator() - creates a new accumulator, such as
-	 * {@link Gee.Collection}.
+	 *  i. create_accumulator() - creates a new accumulator, such as {@link Gee.Collection}.
 	 *  i. accumulate() - incorporates a new element into a accumulator.
 	 *  i. combine() - combines two accumulators into one.
 	 *  i. finish() - transforms the accumulator into a final result.
@@ -45,20 +44,20 @@ namespace Gpseq {
 	 * produce an equivalent result. i.e.:
 	 *
 	 * {{{
-	 *     // the two computations below must be equivalent.
-	 *     // collector: a collector
-	 *     // g0, g1: elements
+	 * // the two computations below must be equivalent.
+	 * // collector: a collector
+	 * // g0, g1: elements
 	 *
-	 *     A a0 = collector.create_accumulator();
-	 *     collector.accumulate(g0, a0);
-	 *     collector.accumulate(g1, a0);
-	 *     A r0 = collector.finish(a0);
+	 * A a0 = collector.create_accumulator();
+	 * collector.accumulate(g0, a0);
+	 * collector.accumulate(g1, a0);
+	 * A r0 = collector.finish(a0);
 	 *
-	 *     A a1 = collector.create_accumulator();
-	 *     collector.accumulate(g0, a1);
-	 *     A a2 = collector.create_accumulator();
-	 *     collector.accumulate(g1, a2);
-	 *     A r1 = collector.finish( collector.combine(a1, a2) );
+	 * A a1 = collector.create_accumulator();
+	 * collector.accumulate(g0, a1);
+	 * A a2 = collector.create_accumulator();
+	 * collector.accumulate(g1, a2);
+	 * A r1 = collector.finish( collector.combine(a1, a2) );
 	 * }}}
 	 *
 	 * Collectors also have a property, {@link features}. it provides hints
