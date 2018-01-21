@@ -40,14 +40,6 @@ vala_args = [
 	'--thread'
 ]
 
-if cc.get_id() == 'gcc'
-	add_global_arguments('-O3', language: 'c')
-elif cc.get_id() == 'clang'
-	add_global_arguments('-O3', language: 'c')
-elif cc.get_id() == 'msvc'
-	add_global_arguments('\O2', language: 'c')
-endif
-
 subdir('src')
 subdir('tests')
 if get_option('build_benchmark')
