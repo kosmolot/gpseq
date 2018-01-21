@@ -175,6 +175,27 @@ public abstract class SeqTests<G> : Gpseq.TestSuite {
 		add_test("collectors-to_concurrent_list:ordered", () => test_collectors_to_concurrent_list(false, true));
 		add_test("collectors-to_concurrent_list:ordered:parallel", () => test_collectors_to_concurrent_list(true, true));
 
+		add_test("collectors-sum_int", () => test_collectors_sum_int(false));
+		add_test("collectors-sum_int:parallel", () => test_collectors_sum_int(true));
+		add_test("collectors-sum_uint", () => test_collectors_sum_uint(false));
+		add_test("collectors-sum_uint:parallel", () => test_collectors_sum_uint(true));
+		add_test("collectors-sum_long", () => test_collectors_sum_long(false));
+		add_test("collectors-sum_long:parallel", () => test_collectors_sum_long(true));
+		add_test("collectors-sum_ulong", () => test_collectors_sum_ulong(false));
+		add_test("collectors-sum_ulong:parallel", () => test_collectors_sum_ulong(true));
+		// add_test("collectors-sum_float", () => test_collectors_sum_float(false));
+		// add_test("collectors-sum_float:parallel", () => test_collectors_sum_float(true));
+		// add_test("collectors-sum_double", () => test_collectors_sum_double(false));
+		// add_test("collectors-sum_double:parallel", () => test_collectors_sum_double(true));
+		add_test("collectors-sum_int32", () => test_collectors_sum_int32(false));
+		add_test("collectors-sum_int32:parallel", () => test_collectors_sum_int32(true));
+		add_test("collectors-sum_uint32", () => test_collectors_sum_uint32(false));
+		add_test("collectors-sum_uint32:parallel", () => test_collectors_sum_uint32(true));
+		add_test("collectors-sum_int64", () => test_collectors_sum_int64(false));
+		add_test("collectors-sum_int64:parallel", () => test_collectors_sum_int64(true));
+		add_test("collectors-sum_uint64", () => test_collectors_sum_uint64(false));
+		add_test("collectors-sum_uint64:parallel", () => test_collectors_sum_uint64(true));
+
 		add_test("complex-fold", () => test_complex_fold(false));
 		add_test("complex-fold:parallel", () => test_complex_fold(true));
 	}
@@ -764,5 +785,105 @@ public abstract class SeqTests<G> : Gpseq.TestSuite {
 			sum += map_to_int(distinct[i]);
 		}
 		return sum;
+	}
+
+	private void test_collectors_sum_int (bool parallel) {
+		GenericArray<G> array = create_rand_generic_array(LENGTH);
+		Seq<G> seq = Seq.of_generic_array<G>(array);
+		if (parallel) seq = seq.parallel();
+		int result = seq.collect( Collectors.sum_int<G>(map_to_int) );
+		int validation = 0;
+		for (int i = 0; i < LENGTH; i++) {
+			validation += map_to_int(array[i]);
+		}
+		assert(result == validation);
+	}
+
+	private void test_collectors_sum_uint (bool parallel) {
+		GenericArray<G> array = create_rand_generic_array(LENGTH);
+		Seq<G> seq = Seq.of_generic_array<G>(array);
+		if (parallel) seq = seq.parallel();
+		uint result = seq.collect( Collectors.sum_uint<G>((g) => (uint)map_to_int(g)) );
+		uint validation = 0;
+		for (int i = 0; i < LENGTH; i++) {
+			validation += (uint) map_to_int(array[i]);
+		}
+		assert(result == validation);
+	}
+
+	private void test_collectors_sum_long (bool parallel) {
+		GenericArray<G> array = create_rand_generic_array(LENGTH);
+		Seq<G> seq = Seq.of_generic_array<G>(array);
+		if (parallel) seq = seq.parallel();
+		long result = seq.collect( Collectors.sum_long<G>((g) => (long)map_to_int(g)) );
+		long validation = 0;
+		for (int i = 0; i < LENGTH; i++) {
+			validation += (long) map_to_int(array[i]);
+		}
+		assert(result == validation);
+	}
+
+	private void test_collectors_sum_ulong (bool parallel) {
+		GenericArray<G> array = create_rand_generic_array(LENGTH);
+		Seq<G> seq = Seq.of_generic_array<G>(array);
+		if (parallel) seq = seq.parallel();
+		ulong result = seq.collect( Collectors.sum_ulong<G>((g) => (ulong)map_to_int(g)) );
+		ulong validation = 0;
+		for (int i = 0; i < LENGTH; i++) {
+			validation += (ulong) map_to_int(array[i]);
+		}
+		assert(result == validation);
+	}
+
+	// private void test_collectors_sum_float (bool parallel) {}
+
+	// private void test_collectors_sum_double (bool parallel) {}
+
+	private void test_collectors_sum_int32 (bool parallel) {
+		GenericArray<G> array = create_rand_generic_array(LENGTH);
+		Seq<G> seq = Seq.of_generic_array<G>(array);
+		if (parallel) seq = seq.parallel();
+		int32 result = seq.collect( Collectors.sum_int32<G>((g) => (int32)map_to_int(g)) );
+		int32 validation = 0;
+		for (int i = 0; i < LENGTH; i++) {
+			validation += (int32) map_to_int(array[i]);
+		}
+		assert(result == validation);
+	}
+
+	private void test_collectors_sum_uint32 (bool parallel) {
+		GenericArray<G> array = create_rand_generic_array(LENGTH);
+		Seq<G> seq = Seq.of_generic_array<G>(array);
+		if (parallel) seq = seq.parallel();
+		uint32 result = seq.collect( Collectors.sum_uint32<G>((g) => (uint32)map_to_int(g)) );
+		uint32 validation = 0;
+		for (int i = 0; i < LENGTH; i++) {
+			validation += (uint32) map_to_int(array[i]);
+		}
+		assert(result == validation);
+	}
+
+	private void test_collectors_sum_int64 (bool parallel) {
+		GenericArray<G> array = create_rand_generic_array(LENGTH);
+		Seq<G> seq = Seq.of_generic_array<G>(array);
+		if (parallel) seq = seq.parallel();
+		int64 result = seq.collect( Collectors.sum_int64<G>((g) => (int64)map_to_int(g)) );
+		int64 validation = 0;
+		for (int i = 0; i < LENGTH; i++) {
+			validation += (int64) map_to_int(array[i]);
+		}
+		assert(result == validation);
+	}
+
+	private void test_collectors_sum_uint64 (bool parallel) {
+		GenericArray<G> array = create_rand_generic_array(LENGTH);
+		Seq<G> seq = Seq.of_generic_array<G>(array);
+		if (parallel) seq = seq.parallel();
+		uint64 result = seq.collect( Collectors.sum_uint64<G>((g) => (uint64)map_to_int(g)) );
+		uint64 validation = 0;
+		for (int i = 0; i < LENGTH; i++) {
+			validation += (uint64) map_to_int(array[i]);
+		}
+		assert(result == validation);
 	}
 }
