@@ -40,8 +40,3 @@ along with Gpseq.  If not, see <http://www.gnu.org/licenses/>.
 
 Gpseq is using a modified version of timsort.vala of libgee.
 See [TimSort.vala](src/TimSort.vala) and [COPYING-libgee](COPYING-libgee).
-
-### benchmarks.vala
-
-Copyright and related rights of [benchmarks.vala](benchmark/benchmarks.vala) are
-waived via CC0. See [COPYING-benchmarks-utility](COPYING-benchmarks-utility).
