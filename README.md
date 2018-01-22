@@ -10,15 +10,14 @@ using Gpseq;
 
 string[] array = {"dog", "cat", "pig", "boar", "bear"};
 Seq.of_array<string>((owned) array)
-	// .parallel() if you want parallel processing
+	.parallel()
 	.filter((g) => g.length == 3)
 	.map<string>((g) => g.up())
-	.order_by()
 	.foreach((g) => print("%s\n", g));
 
-// output:
-// CAT
+// (unordered) output:
 // DOG
+// CAT
 // PIG
 ```
 
