@@ -25,6 +25,7 @@ void main (string[] args) {
 }
 
 void register_tests () {
+	new SubArrayTests().register();
 	new UtilsTests().register();
 	new IntSeqTests().register();
 	new NullableIntSeqTests().register();

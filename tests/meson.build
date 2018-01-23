@@ -4,6 +4,7 @@ test_sources = files(
 	'NullableStringSeqTests.vala',
 	'SeqTests.vala',
 	'StringSeqTests.vala',
+	'SubArrayTests.vala',
 	'TestSuite.vala',
 	'TestUtils.vala',
 	'UtilsTests.vala',
