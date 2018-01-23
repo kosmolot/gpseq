@@ -849,45 +849,6 @@ public abstract class SeqTests<G> : Gpseq.TestSuite {
 		}
 	}
 
-	private void test_complex_fold (bool parallel) {
-		GenericArray<G> array = create_rand_generic_array(LENGTH);
-		Seq<G> seq = Seq.of_generic_array<G>(array);
-		if (parallel) seq = seq.parallel();
-		int result = seq
-			.filter(filter)
-			.distinct(hash, equal)
-			.order_by(compare)
-			.chop_ordered(SKIP, LIMIT)
-			.map<int>(map_to_int)
-			.fold<int>((g, a) => g + a, (a, b) => a + b, 0);
-		int validation = get_complex_fold_validation(array);
-		assert(result == validation);
-	}
-
-	private int get_complex_fold_validation (GenericArray<G> array) {
-		GenericArray<G> filtered = new GenericArray<G>();
-		for (int i = 0; i < array.length; i++) {
-			if ( filter(array[i]) ) filtered.add(array[i]);
-		}
-
-		GenericArray<G> distinct = new GenericArray<G>();
-		Set<G> seen = new HashSet<G>(hash, equal);
-		for (int i = 0; i < filtered.length; i++) {
-			if (!seen.contains(filtered[i])) {
-				seen.add(filtered[i]);
-				distinct.add(filtered[i]);
-			}
-		}
-		distinct.sort_with_data(compare);
-
-		int sum = 0;
-		int limit = int.min(distinct.length, SKIP + LIMIT);
-		for (int i = SKIP; i < limit; i++) {
-			sum += map_to_int(distinct[i]);
-		}
-		return sum;
-	}
-
 	private void test_collectors_sum_int (bool parallel) {
 		GenericArray<G> array = create_rand_generic_array(LENGTH);
 		Seq<G> seq = Seq.of_generic_array<G>(array);
@@ -986,5 +947,44 @@ public abstract class SeqTests<G> : Gpseq.TestSuite {
 			validation += (uint64) map_to_int(array[i]);
 		}
 		assert(result == validation);
+	}
+
+	private void test_complex_fold (bool parallel) {
+		GenericArray<G> array = create_rand_generic_array(LENGTH);
+		Seq<G> seq = Seq.of_generic_array<G>(array);
+		if (parallel) seq = seq.parallel();
+		int result = seq
+			.filter(filter)
+			.distinct(hash, equal)
+			.order_by(compare)
+			.chop_ordered(SKIP, LIMIT)
+			.map<int>(map_to_int)
+			.fold<int>((g, a) => g + a, (a, b) => a + b, 0);
+		int validation = get_complex_fold_validation(array);
+		assert(result == validation);
+	}
+
+	private int get_complex_fold_validation (GenericArray<G> array) {
+		GenericArray<G> filtered = new GenericArray<G>();
+		for (int i = 0; i < array.length; i++) {
+			if ( filter(array[i]) ) filtered.add(array[i]);
+		}
+
+		GenericArray<G> distinct = new GenericArray<G>();
+		Set<G> seen = new HashSet<G>(hash, equal);
+		for (int i = 0; i < filtered.length; i++) {
+			if (!seen.contains(filtered[i])) {
+				seen.add(filtered[i]);
+				distinct.add(filtered[i]);
+			}
+		}
+		distinct.sort_with_data(compare);
+
+		int sum = 0;
+		int limit = int.min(distinct.length, SKIP + LIMIT);
+		for (int i = SKIP; i < limit; i++) {
+			sum += map_to_int(distinct[i]);
+		}
+		return sum;
 	}
 }
