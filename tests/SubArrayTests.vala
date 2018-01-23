@@ -38,7 +38,7 @@ public class SubArrayTests : Gpseq.TestSuite {
 	}
 
 	private GenericArray<int> create_rand_generic_array (int length) {
-		var array = new GenericArray<int>();
+		var array = new GenericArray<int>(length);
 		for (int i = 0; i < LENGTH; i++) {
 			array.add( (int) Random.next_int() );
 		}
@@ -71,7 +71,7 @@ public class SubArrayTests : Gpseq.TestSuite {
 	private void test_foreach () {
 		var array = create_rand_generic_array(LENGTH);
 		var sub = new SubArray<int>(array.data);
-		var result = new GenericArray<int>();
+		var result = new GenericArray<int>(LENGTH / 2);
 		int i = 0;
 		sub.foreach((g) => {
 			result.add(g);
