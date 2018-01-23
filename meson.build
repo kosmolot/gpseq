@@ -1,5 +1,5 @@
 project('gpseq', 'vala', 'c',
-	version: '0.1.0-alpha', # semantic versioning
+	version: '0.1.0-alpha', # semantic versioning (w/o build metadata)
 	license: 'LGPL3')
 
 project_desc = 'A GObject utility library providing parallel data processing'
