@@ -1,6 +1,17 @@
 benchmark_sources = files(
+	'benchmark-chop.vala',
+	'benchmark-collect.vala',
+	'benchmark-complex.vala',
+	'benchmark-filter.vala',
+	'benchmark-find.vala',
+	'benchmark-flat-map.vala',
+	'benchmark-map.vala',
+	'benchmark-max.vala',
+	'benchmark-reduce.vala',
+	'benchmark-sort.vala',
 	'benchmark.vala',
-	'benchmarks.vala'
+	'benchmarks.vala',
+	'utils.vala'
 )
 
 benchmark_deps = [

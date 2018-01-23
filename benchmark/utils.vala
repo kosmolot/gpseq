@@ -1,4 +1,4 @@
-/* benchmark.vala
+/* utils.vala
  *
  * Copyright (C) 2018  kosmolot (kosmolot17@yandex.com)
  *
@@ -18,29 +18,23 @@
  * along with Gpseq.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using Benchmarks;
-using Gpseq;
+public GenericArray<int> create_rand_generic_int_array (int len) {
+	var array = new GenericArray<int>(len);
+	for (int i = 0; i < len; i++) {
+		array.add((int) Random.next_int());
+	}
+	return array;
+}
 
-private const int LENGTH = 16777216;
+public Gpseq.Seq<int> create_rand_int_seq () {
+	return Gpseq.Seq.of_supply_func<int>(() => (int)Random.next_int());
+}
 
-void main () {
-	uint processors = get_num_processors();
-	uint parallels = TaskEnv.get_default_task_env().executor.parallels;
-	print("> CPU logical cores: %u\n", processors);
-	print("> Executor parallelism: %u\n", parallels);
-	print("> sizeof(gint): %u\n", (uint) sizeof(int));
-	print("> sizeof(gpointer): %u\n", (uint) sizeof(void*));
-
-	benchmark(1, (r) => {
-		benchmark_chop(r);
-		benchmark_collect(r);
-		benchmark_complex(r);
-		benchmark_filter(r);
-		benchmark_find(r);
-		benchmark_flat_map(r);
-		benchmark_map(r);
-		benchmark_max(r);
-		benchmark_reduce(r);
-		benchmark_sort(r);
-	});
+public G random_pick<G> (G[] array, out int? index = null) {
+	assert(array.length > 0);
+	int32 len = array.length;
+	if (len < 0) len = int32.MAX;
+	int pick = (int) Random.int_range(0, len);
+	index = pick;
+	return array[pick];
 }

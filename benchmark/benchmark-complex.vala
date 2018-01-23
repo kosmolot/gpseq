@@ -1,4 +1,4 @@
-/* benchmark.vala
+/* benchmark-complex.vala
  *
  * Copyright (C) 2018  kosmolot (kosmolot17@yandex.com)
  *
@@ -21,26 +21,25 @@
 using Benchmarks;
 using Gpseq;
 
-private const int LENGTH = 16777216;
+void benchmark_complex (Reporter r) {
+	r.group("complex-example", (r) => {
+		r.report("sequential", (s) => {
+			var array = create_rand_generic_int_array(LENGTH);
+			Seq.of_generic_array<int>(array)
+				.filter((g) => g % 4 == 0)
+				.map<int>((g) => g * 726)
+				.order_by()
+				.fold<int>((g, a) => g + a, (a, b) => a + b, 0);
+		});
 
-void main () {
-	uint processors = get_num_processors();
-	uint parallels = TaskEnv.get_default_task_env().executor.parallels;
-	print("> CPU logical cores: %u\n", processors);
-	print("> Executor parallelism: %u\n", parallels);
-	print("> sizeof(gint): %u\n", (uint) sizeof(int));
-	print("> sizeof(gpointer): %u\n", (uint) sizeof(void*));
-
-	benchmark(1, (r) => {
-		benchmark_chop(r);
-		benchmark_collect(r);
-		benchmark_complex(r);
-		benchmark_filter(r);
-		benchmark_find(r);
-		benchmark_flat_map(r);
-		benchmark_map(r);
-		benchmark_max(r);
-		benchmark_reduce(r);
-		benchmark_sort(r);
+		r.report("parallel", (s) => {
+			var array = create_rand_generic_int_array(LENGTH);
+			Seq.of_generic_array<int>(array)
+				.parallel()
+				.filter((g) => g % 4 == 0)
+				.map<int>((g) => g * 726)
+				.order_by()
+				.fold<int>((g, a) => g + a, (a, b) => a + b, 0);
+		});
 	});
 }

@@ -1,4 +1,4 @@
-/* benchmark.vala
+/* benchmark-chop.vala
  *
  * Copyright (C) 2018  kosmolot (kosmolot17@yandex.com)
  *
@@ -19,28 +19,30 @@
  */
 
 using Benchmarks;
-using Gpseq;
 
-private const int LENGTH = 16777216;
+private const int SKIP_LENGTH = LENGTH / 8;
+private const int LIMIT_LENGTH = LENGTH / 4;
 
-void main () {
-	uint processors = get_num_processors();
-	uint parallels = TaskEnv.get_default_task_env().executor.parallels;
-	print("> CPU logical cores: %u\n", processors);
-	print("> Executor parallelism: %u\n", parallels);
-	print("> sizeof(gint): %u\n", (uint) sizeof(int));
-	print("> sizeof(gpointer): %u\n", (uint) sizeof(void*));
+void benchmark_chop (Reporter r) {
+	r.group("chop", (r) => {
+		r.report("chop:sequential", (s) => {
+			create_rand_int_seq()
+				.chop(SKIP_LENGTH, LIMIT_LENGTH)
+				.foreach((g) => {});
+		});
 
-	benchmark(1, (r) => {
-		benchmark_chop(r);
-		benchmark_collect(r);
-		benchmark_complex(r);
-		benchmark_filter(r);
-		benchmark_find(r);
-		benchmark_flat_map(r);
-		benchmark_map(r);
-		benchmark_max(r);
-		benchmark_reduce(r);
-		benchmark_sort(r);
+		r.report("chop:parallel", (s) => {
+			create_rand_int_seq()
+				.parallel()
+				.chop(SKIP_LENGTH, LIMIT_LENGTH)
+				.foreach((g) => {});
+		});
+
+		r.report("chop_ordered:parallel", (s) => {
+			create_rand_int_seq()
+				.parallel()
+				.chop_ordered(SKIP_LENGTH, LIMIT_LENGTH)
+				.foreach((g) => {});
+		});
 	});
 }

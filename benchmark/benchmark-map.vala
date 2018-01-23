@@ -1,4 +1,4 @@
-/* benchmark.vala
+/* benchmark-map.vala
  *
  * Copyright (C) 2018  kosmolot (kosmolot17@yandex.com)
  *
@@ -21,26 +21,23 @@
 using Benchmarks;
 using Gpseq;
 
-private const int LENGTH = 16777216;
+void benchmark_map (Reporter r) {
+	r.group("map", (r) => {
+		r.report("map:sequential", (s) => {
+			var array = create_rand_generic_int_array(LENGTH);
+			s.start();
+			Seq.of_generic_array<int>(array)
+				.map<int>((g) => g)
+				.foreach((g) => {});
+		});
 
-void main () {
-	uint processors = get_num_processors();
-	uint parallels = TaskEnv.get_default_task_env().executor.parallels;
-	print("> CPU logical cores: %u\n", processors);
-	print("> Executor parallelism: %u\n", parallels);
-	print("> sizeof(gint): %u\n", (uint) sizeof(int));
-	print("> sizeof(gpointer): %u\n", (uint) sizeof(void*));
-
-	benchmark(1, (r) => {
-		benchmark_chop(r);
-		benchmark_collect(r);
-		benchmark_complex(r);
-		benchmark_filter(r);
-		benchmark_find(r);
-		benchmark_flat_map(r);
-		benchmark_map(r);
-		benchmark_max(r);
-		benchmark_reduce(r);
-		benchmark_sort(r);
+		r.report("map:parallel", (s) => {
+			var array = create_rand_generic_int_array(LENGTH);
+			s.start();
+			Seq.of_generic_array<int>(array)
+				.parallel()
+				.map<int>((g) => g)
+				.foreach((g) => {});
+		});
 	});
 }
