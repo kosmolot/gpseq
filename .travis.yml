@@ -20,7 +20,7 @@ before_install:
 
 before_script:
   - mkdir build
-  - meson -D b_coverage=true -D build_valadoc=valadoc,gtkdoc build
+  - meson -D b_coverage=true -D build_doc=valadoc,gtkdoc build
   - ninja -C build -v
 
 script:
