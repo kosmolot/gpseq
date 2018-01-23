@@ -1,6 +1,7 @@
 project('gpseq', 'vala', 'c',
 	version: '0.1.0-alpha', # semantic versioning (w/o build metadata)
-	license: 'LGPL3')
+	license: 'LGPL3',
+	meson_version: '>=0.44.0')
 
 project_desc = 'A GObject utility library providing parallel data processing'
 
@@ -46,24 +47,40 @@ if get_option('build_benchmark')
 	subdir('benchmark')
 endif
 
-if get_option('build_valadoc')
+if get_option('build_doc').length() > 0
 	valadoc = find_program('valadoc')
-	valadoc_cmd = [valadoc,
+	doc_cmd_base = [valadoc,
 		'--package-name=' + meson.project_name() + '-' + api_version,
 		'--package-version=' + meson.project_version(),
 		'--target-glib=' + glib_reqs,
 		'--force',
-		'--doclet=html',
 		'--pkg=glib-2.0',
 		'--pkg=gobject-2.0',
 		'--pkg=gee-0.8',
 		'--directory=@OUTPUT@',
 		'@INPUT@'
 	]
-	custom_target('valadoc', command: valadoc_cmd,
-		input: sources,
-		output: 'docs',
-		build_by_default: true,
-		install: true,
-		install_dir: 'share/doc/' + meson.project_name() + '-' + api_version)
+
+	if get_option('build_doc').contains('valadoc')
+		valadoc_cmd = [doc_cmd_base, '--doclet=html']
+		custom_target('valadoc', command: valadoc_cmd,
+			input: sources,
+			output: 'valadoc',
+			build_by_default: true,
+			install: true,
+			install_dir: 'share/doc/' + meson.project_name() + '-' + api_version)
+	endif
+
+	if get_option('build_doc').contains('gtkdoc')
+		gtkdoc_cmd = [doc_cmd_base,
+			'--doclet=gtkdoc',
+			'--doclet-arg=' + meson.current_build_dir() + '/src/' + meson.project_name() + '.h'
+		]
+		custom_target('gtkdoc', command: gtkdoc_cmd,
+			input: sources,
+			output: 'gtkdoc',
+			build_by_default: true,
+			install: true,
+			install_dir: 'share/doc/' + meson.project_name() + '-' + api_version)
+	endif
 endif
