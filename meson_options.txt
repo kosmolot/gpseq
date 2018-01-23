@@ -1,2 +1,2 @@
-option('build_benchmark', type: 'boolean', value: false, description: 'build benchmark')
-option('build_doc', type: 'array', choices: ['valadoc', 'gtkdoc'], value: [], description: 'build documentation')
+option('build_benchmark', type: 'boolean', value: false, description: 'Whether to build benchmark')
+option('build_doc', type: 'array', choices: ['valadoc', 'gtkdoc'], value: [], description: 'Documentations that will be built')
