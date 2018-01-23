@@ -211,6 +211,9 @@ namespace Benchmarks {
 			if (len == 0) {
 				print("%s%s\n", header_indent(depth), _label + GROUP_SUFFIX);
 			} else {
+				var sorted_reports = get_sorted_reports();
+				double fastest = sorted_reports[0].real_time;
+
 				string group_label = _label + GROUP_SUFFIX;
 				string total_label = LABEL_TOTAL + LABEL_SUFFIX;
 				string avg_label = LABEL_AVG + LABEL_SUFFIX;
@@ -224,7 +227,7 @@ namespace Benchmarks {
 				string time_format = @"%.$(DECIMAL_PLACES)f$(TIME_SUFFIX)";
 				double m_total = 0;
 				double r_total = 0;
-				_reports.foreach((report) => {
+				sorted_reports.foreach((report) => {
 					int lw = report.label.length + LABEL_SUFFIX.length;
 					int mw = time_format.printf(report.monotonic_time).length;
 					int rw = time_format.printf(report.real_time).length;
@@ -244,16 +247,17 @@ namespace Benchmarks {
 				print(header_format, group_label, MONOTONIC_TIME_TITLE, REAL_TIME_TITLE);
 
 				string idt = indent(depth);
-				string body_format = @"$(idt)%-$(label_width)s   $(time_format)   $(time_format)%s\n";
-				_reports.foreach((report) => {
+				string body_format = @"$(idt)%-$(label_width)s   $(time_format)   $(time_format)%s%s\n";
+				sorted_reports.foreach((report) => {
+					string multiple = fastest == report.real_time || fastest == 0 ? "" : "   %.2fx slower".printf(report.real_time / fastest);
 					string note = report.note.length == 0 ? "" : "   " + report.note;
-					print(body_format, report.label + LABEL_SUFFIX, report.monotonic_time, report.real_time, note);
+					print(body_format, report.label + LABEL_SUFFIX, report.monotonic_time, report.real_time, multiple, note);
 				});
 
-				print(body_format, total_label, m_total, r_total, "");
+				print(body_format, total_label, m_total, r_total, "", "");
 				double m_avg = m_total / len;
 				double r_avg = r_total / len;
-				print(body_format, avg_label, m_avg, r_avg, "");
+				print(body_format, avg_label, m_avg, r_avg, "", "");
 			}
 			_children.foreach((g) => g.print_result(depth + 1));
 		}
@@ -272,6 +276,19 @@ namespace Benchmarks {
 				buf.append(INDENT);
 			}
 			return buf.str;
+		}
+
+		private GenericArray<ReportImpl> get_sorted_reports () {
+			var result = new GenericArray<ReportImpl>(_reports.length);
+			for (int i = 0; i < _reports.length; i++) {
+				result.add(_reports[i]);
+			}
+			result.sort_with_data((a, b) => {
+				double ta = a.real_time;
+				double tb = b.real_time;
+				return ta < tb ? -1 : (ta == tb ? 0 : 1);
+			});
+			return result;
 		}
 	}
 
