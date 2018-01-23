@@ -22,11 +22,14 @@
 
 ### Test
 
-Run `meson test -C build -t 5 --print-errorlogs --verbose` after build.
+After meson build:
+
+1. `ninja -C build`
+2. `meson test -C build -t 5 --print-errorlogs --verbose`
 
 ### Install
 
-Run `sudo ninja install -C build` after build.
+Run `sudo ninja install -C build` after meson build.
 
 To uninstall: `sudo ninja uninstall -C build`
 
