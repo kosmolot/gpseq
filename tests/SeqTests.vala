@@ -34,6 +34,13 @@ public abstract class SeqTests<G> : Gpseq.TestSuite {
 	}
 
 	private void register_tests () {
+		add_test("element_type", test_element_type);
+		add_test("sequential", () => test_sequential);
+		add_test("parallel", () => test_parallel);
+
+		add_test("closed", () => test_closed(false));
+		add_test("closed:parallel", () => test_closed(true));
+
 		add_test("iterator", test_iterator);
 		add_test("spliterator", test_spliterator);
 
@@ -228,6 +235,62 @@ public abstract class SeqTests<G> : Gpseq.TestSuite {
 	protected abstract string map_to_str (owned G g);
 	protected abstract Iterator<G> flat_map (owned G g);
 	protected abstract int map_to_int (owned G g);
+
+	private Seq<G> empty_seq (bool parallel = false) {
+		Seq<G> seq = Seq.empty<G>();
+		if (parallel) seq = seq.parallel();
+		return seq;
+	}
+
+	private void test_element_type () {
+		assert(empty_seq().element_type == typeof(G));
+	}
+
+	private void test_sequential () {
+		Seq<G> seq = empty_seq(true);
+		assert(seq.is_parallel);
+		assert(!seq.sequential().is_parallel);
+	}
+
+	private void test_parallel () {
+		Seq<G> seq = empty_seq(false);
+		assert(!seq.is_parallel);
+		assert(seq.parallel().is_parallel);
+	}
+
+	private void test_closed (bool parallel) {
+		Seq<G> seq;
+		seq = empty_seq(parallel); seq.close(); assert(seq.is_closed);
+		// NOTE reflect operations changes.
+		seq = empty_seq(parallel); seq.sequential(); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.parallel(); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.iterator(); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.spliterator(); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.count(); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.distinct(); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.all_match((g) => false); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.any_match((g) => true); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.none_match((g) => true); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.find_any((g) => true); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.find_first((g) => true); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.skip(0); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.limit(0); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.chop(0); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.skip_ordered(0); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.limit_ordered(0); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.chop_ordered(0); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.filter(() => true); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.fold<void*>((g) => { return null; }, (a, b) => { return null; }, null); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.reduce((a, b) => { return a; }); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.map<G>((g) => { return g; }); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.flat_map<G>((g) => Collection.empty<G>().iterator()); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.max(); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.min(); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.order_by(); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.foreach((g) => {}); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.collect( Collectors.sum_int<G>(() => 0) ); assert(seq.is_closed);
+		seq = empty_seq(parallel); seq.collect_ordered( Collectors.sum_int<G>(() => 0) ); assert(seq.is_closed);
+	}
 
 	private void test_iterator () {
 		GenericArray<G> array = create_rand_generic_array(LENGTH);
