@@ -29,7 +29,7 @@ namespace Gpseq {
 
 		/**
 		 * Creates a new sub array with an unowned view of an array.
-		 * @param data an unowned view of an array. it must be a gpointer array
+		 * @param data an unowned view of a gpointer array
 		 */
 		public SubArray (G[] data) {
 			_data = data;

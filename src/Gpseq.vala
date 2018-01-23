@@ -42,7 +42,7 @@ namespace Gpseq {
 	 * // => the result is 1, 2, 3, 4, 5
 	 * }}}
 	 *
-	 * @param array an array to be sorted. it must be a gpointer array
+	 * @param array a gpointer array to be sorted
 	 * @param compare compare function to compare elements. if it is not
 	 * specified, the result of {@link Gee.Functions.get_compare_func_for} is
 	 * used
