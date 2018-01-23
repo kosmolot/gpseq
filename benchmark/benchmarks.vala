@@ -1,5 +1,4 @@
 /* benchmarks.vala - A single-file benchmark utility
- * version 0.1.0
  *
  * deps:
  *  * glib-2.0
