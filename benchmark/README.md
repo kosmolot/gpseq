@@ -10,11 +10,11 @@
 > sizeof(gpointer): 8
 root)
  - chop)                    monotonic        real
-   chop:sequential:         0.310896s   0.310895s
-   chop:parallel:           0.891581s   0.891582s   2.87x slower
-   chop_ordered:parallel:   6.017017s   6.017016s   19.35x slower
-   *total:                  7.219494s   7.219493s
-   *avg:                    2.406498s   2.406498s
+   chop:parallel:           0.035437s   0.035438s
+   chop:sequential:         0.278612s   0.278612s   7.86x slower
+   chop_ordered:parallel:   0.826072s   0.826072s   23.31x slower
+   *total:                  1.140121s   1.140122s
+   *avg:                    0.380040s   0.380041s
  - sum-int-collector)    monotonic        real
    sum_int:sequential:   2.394352s   2.394351s
    sum_int:parallel:     3.270564s   3.270564s   1.37x slower
