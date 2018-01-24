@@ -25,20 +25,20 @@ void benchmark_complex (Reporter r) {
 	r.group("complex-example", (r) => {
 		r.report("sequential", (s) => {
 			var array = create_rand_generic_int_array(LENGTH);
+			s.start();
 			Seq.of_generic_array<int>(array)
 				.filter((g) => g % 4 == 0)
 				.map<int>((g) => g * 726)
-				.order_by()
 				.fold<int>((g, a) => g + a, (a, b) => a + b, 0);
 		});
 
 		r.report("parallel", (s) => {
 			var array = create_rand_generic_int_array(LENGTH);
+			s.start();
 			Seq.of_generic_array<int>(array)
 				.parallel()
 				.filter((g) => g % 4 == 0)
 				.map<int>((g) => g * 726)
-				.order_by()
 				.fold<int>((g, a) => g + a, (a, b) => a + b, 0);
 		});
 	});
