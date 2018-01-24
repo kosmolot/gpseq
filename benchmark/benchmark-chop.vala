@@ -26,20 +26,20 @@ private const int LIMIT_LENGTH = LENGTH / 4;
 void benchmark_chop (Reporter r) {
 	r.group("chop", (r) => {
 		r.report("chop:sequential", (s) => {
-			create_rand_int_seq()
+			create_infinite_int_seq()
 				.chop(SKIP_LENGTH, LIMIT_LENGTH)
 				.foreach((g) => {});
 		});
 
 		r.report("chop:parallel", (s) => {
-			create_rand_int_seq()
+			create_infinite_int_seq()
 				.parallel()
 				.chop(SKIP_LENGTH, LIMIT_LENGTH)
 				.foreach((g) => {});
 		});
 
 		r.report("chop_ordered:parallel", (s) => {
-			create_rand_int_seq()
+			create_infinite_int_seq()
 				.parallel()
 				.chop_ordered(SKIP_LENGTH, LIMIT_LENGTH)
 				.foreach((g) => {});

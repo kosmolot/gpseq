@@ -26,8 +26,8 @@ public GenericArray<int> create_rand_generic_int_array (int len) {
 	return array;
 }
 
-public Gpseq.Seq<int> create_rand_int_seq () {
-	return Gpseq.Seq.of_supply_func<int>(() => (int)Random.next_int());
+public Gpseq.Seq<int> create_infinite_int_seq () {
+	return Gpseq.Seq.of_supply_func<int>(() => 726);
 }
 
 public G random_pick<G> (G[] array, out int? index = null) {
