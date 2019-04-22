@@ -10,8 +10,8 @@
 
 ### Dependencies
 
-- glib-2.0 >= 2.36
-- gobject-2.0 >= 2.36
+- glib-2.0 >= 2.48
+- gobject-2.0 >= 2.48
 - gee-0.8 >= 0.18
 - posix (optional; to build benchmark) -- included in vala vapis
 
