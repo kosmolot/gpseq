@@ -73,6 +73,9 @@ sources = files(
 	'collectors/SumUlongCollector.vala'
 )
 
+
+
+
 gpseq_lib = library(meson.project_name() + '-' + api_version, sources,
 	vala_header: meson.project_name() + '.h',
 	vala_gir: meson.project_name() + '-' + api_version + '.gir',
@@ -82,16 +85,18 @@ gpseq_lib = library(meson.project_name() + '-' + api_version, sources,
 	vala_args: vala_args)
 
 gpseq_dep = declare_dependency(link_with: gpseq_lib,
-	include_directories: include_directories('.'))
+	dependencies: dependencies,
+	include_directories:  [include_directories('.')]
+	)
 
 install_data('../' + meson.project_name() + '-@0@.deps'.format(api_version),
-	install_dir: 'share/vala/vapi')
+	install_dir: join_paths(get_option('datadir'), 'vala', 'vapi')
+	)
 
 pkg = import('pkgconfig')
 pkg.generate(libraries: gpseq_lib,
 	version: meson.project_version(),
 	name: meson.project_name(),
-	filebase: meson.project_name() + '-' + api_version,
 	requires: pkg_requires,
 	description: project_desc,
 	subdirs: meson.project_name() + '-' + api_version)

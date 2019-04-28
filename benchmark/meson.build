@@ -16,8 +16,9 @@ benchmark_sources = files(
 
 benchmark_deps = [
 	gpseq_dep
+	meson.get_compiler('vala').find_library('posix')
 ]
 
 executable('gpseq-benchmark', benchmark_sources,
 	dependencies: [dependencies, benchmark_deps],
-	vala_args: [vala_args, '--pkg=posix'])
+	vala_args: [vala_args])
