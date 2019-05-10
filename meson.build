@@ -14,9 +14,9 @@ message('api version: ' + api_version)
 cc = meson.get_compiler('c')
 
 m_dep = cc.find_library('m', required: false)
-glib_reqs = '2.36'
+glib_reqs = '2.48'
 glib_dep = dependency('glib-2.0', version: '>=' + glib_reqs)
-gobject_reqs = '2.36'
+gobject_reqs = '2.48'
 gobject_dep = dependency('gobject-2.0', version: '>=' + gobject_reqs)
 gee_reqs = '0.18'
 gee_dep = dependency('gee-0.8', version: '>=' + gee_reqs)
@@ -37,8 +37,7 @@ pkg_requires = [
 vala_args = [
 	'--target-glib=' + glib_reqs,
 	'--enable-experimental',
-	'--verbose',
-	'--thread'
+	'--verbose'
 ]
 
 subdir('src')
